@@ -1,0 +1,15 @@
+freertos_proj\timers.o: ..\RTOS\source\timers.c
+freertos_proj\timers.o: D:\soft\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+freertos_proj\timers.o: ..\RTOS\include\FreeRTOS.h
+freertos_proj\timers.o: D:\soft\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+freertos_proj\timers.o: D:\soft\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+freertos_proj\timers.o: ..\RTOS\include\FreeRTOSConfig.h
+freertos_proj\timers.o: ..\RTOS\include\projdefs.h
+freertos_proj\timers.o: ..\RTOS\include\portable.h
+freertos_proj\timers.o: ..\RTOS\include\deprecated_definitions.h
+freertos_proj\timers.o: ..\RTOS\portable\portmacro.h
+freertos_proj\timers.o: ..\RTOS\include\mpu_wrappers.h
+freertos_proj\timers.o: ..\RTOS\include\task.h
+freertos_proj\timers.o: ..\RTOS\include\list.h
+freertos_proj\timers.o: ..\RTOS\include\queue.h
+freertos_proj\timers.o: ..\RTOS\include\timers.h
