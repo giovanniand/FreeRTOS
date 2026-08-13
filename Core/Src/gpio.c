@@ -58,13 +58,13 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = KEY2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(KEY2_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = KET1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(KET1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin */
@@ -79,16 +79,16 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 2 */
 uint8_t Key_Scan_RTOS(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
-    /* 1. ¼ì²âÊÇ·ñÓÐ°´¼ü°´ÏÂ */
+    /* 1. ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
     {
-        /* 2. Èí¼þÏû¶¶£ºÖ÷¶¯ÈÃ³ö CPU 20ms£¬¶ø²»ÊÇÔ­µØÖ´ÐÐ¿ÕÑ­»· */
+        /* 2. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ CPU 20msï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½Ö´ï¿½Ð¿ï¿½Ñ­ï¿½ï¿½ */
         vTaskDelay(pdMS_TO_TICKS(20));; 
         
-        /* 3. ÔÙ´ÎÈ·ÈÏÊÇ·ñÕæµÄ°´ÏÂÁË */
+        /* 3. ï¿½Ù´ï¿½È·ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½ */
         if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
         {
-            /* 4. µÈ´ý°´¼üÊÍ·Å£ºÇ§Íò²»ÄÜËÀÑ­»·£¬±ØÐë¼Ó vTaskDelay ÊÍ·Å CPU ¸øÆäËûÈÎÎñ */
+            /* 4. ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·Å£ï¿½Ç§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ vTaskDelay ï¿½Í·ï¿½ CPU ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
             while (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON)
             {
                 vTaskDelay(pdMS_TO_TICKS(20));; 

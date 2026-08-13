@@ -3,6 +3,8 @@
 
 
 void freertos_start(void);
+void startup_task(void *pvParameters);
+void start_tasks(void);
 
 
 
