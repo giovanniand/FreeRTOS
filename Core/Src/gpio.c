@@ -1,4 +1,7 @@
 /* USER CODE BEGIN Header */
+#include "key.h"
+#include "FreeRTOS.h"
+#include "task.h"
 /**
   ******************************************************************************
   * @file    gpio.c
@@ -50,26 +53,26 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : PC13 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(GPIOB, LED_G_Pin|LED_B_Pin|LED_R_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = LED_R_Pin;
+  GPIO_InitStruct.Pin = KEY2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(KEY2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = KET1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(KET1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = LED_G_Pin|LED_B_Pin|LED_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_R_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
@@ -80,7 +83,7 @@ uint8_t Key_Scan_RTOS(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
     if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
     {
         /* 2. 软件消抖：主动让出 CPU 20ms，而不是原地执行空循环 */
-        vTaskDelay(pdMS_TO_TICKS(20)); 
+        vTaskDelay(pdMS_TO_TICKS(20));; 
         
         /* 3. 再次确认是否真的按下了 */
         if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
@@ -88,7 +91,7 @@ uint8_t Key_Scan_RTOS(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
             /* 4. 等待按键释放：千万不能死循环，必须加 vTaskDelay 释放 CPU 给其他任务 */
             while (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON)
             {
-                vTaskDelay(pdMS_TO_TICKS(10)); 
+                vTaskDelay(pdMS_TO_TICKS(20));; 
             }
             return KEY_ON;
         }

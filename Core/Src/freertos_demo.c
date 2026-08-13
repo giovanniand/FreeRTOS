@@ -2,10 +2,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "gpio.h"
+#include "led.h"
+#include "key.h"
 
 /* 启动任务配置 */
 #define START_STACK_SIZE 128
-#define tskIDLE_PRIORITY 1
+#define tskIDLE_PRIORITY 0
 TaskHandle_t startup_task_handle;
 
 /* 任务1配置 */
@@ -42,7 +44,8 @@ void task1(void *pvParameters)
 {
     while(1)
     {
-
+        LED1_TOGGLE;
+        vTaskDelay(pdMS_TO_TICKS(500)); // Delay for 500ms
     }
 }
 
@@ -53,7 +56,11 @@ void task1(void *pvParameters)
  */
 void task2(void *pvParameters)
 {
-    
+    while(1)
+    {
+        LED2_TOGGLE;
+        vTaskDelay(pdMS_TO_TICKS(500)); // Delay for 500ms
+    }
 }
 
 /**
@@ -63,7 +70,17 @@ void task2(void *pvParameters)
  */
 void task3(void *pvParameters)
 {
-    
+    while(1)
+    {
+        if (Key_Scan_RTOS(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
+        {
+            if(task1_handle != NULL)
+            {
+                vTaskDelete(task1_handle); // 删除任务1
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(100)); // Delay for 100ms
+    }
 }
 
 /**
