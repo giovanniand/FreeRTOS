@@ -79,16 +79,16 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 2 */
 uint8_t Key_Scan_RTOS(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
-    /* 1. ����Ƿ��а������� */
+    /* 1. 检测是否有按键按下 */
     if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
     {
-        /* 2. ���������������ó� CPU 20ms��������ԭ��ִ�п�ѭ�� */
-        vTaskDelay(pdMS_TO_TICKS(20));; 
+        /* 2. 软件消抖：主动让出 CPU 20ms，而不是原地执行空循环 */
+        vTaskDelay(pdMS_TO_TICKS(20));
         
-        /* 3. �ٴ�ȷ���Ƿ���İ����� */
+        /* 3. 再次确认是否真的按下了 */
         if (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON) 
         {
-            /* 4. �ȴ������ͷţ�ǧ������ѭ��������� vTaskDelay �ͷ� CPU ���������� */
+            /* 4. 等待按键释放：千万不能死循环，必须加 vTaskDelay 释放 CPU 给其他任务 */
             while (HAL_GPIO_ReadPin(GPIOx, GPIO_Pin) == KEY_ON)
             {
                 vTaskDelay(pdMS_TO_TICKS(20));; 
