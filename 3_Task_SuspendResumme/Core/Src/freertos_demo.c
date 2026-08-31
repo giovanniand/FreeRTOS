@@ -4,6 +4,7 @@
 #include "gpio.h"
 #include "led.h"
 #include "key.h"
+#include <stdio.h>
 
 /* 启动任务配置 */
 #define START_STACK_SIZE 128
@@ -46,6 +47,7 @@ void task1(void *pvParameters)
     while(1)
     {
         LED1_TOGGLE;
+				printf("task1\r\n");
         vTaskDelay(pdMS_TO_TICKS(500)); // Delay for 500ms
     }
 }
@@ -61,6 +63,7 @@ void task2(void *pvParameters)
     while(1)
     {
         LED2_TOGGLE;
+				printf("task2\r\n");
         vTaskDelay(pdMS_TO_TICKS(500)); // Delay for 500ms
     }
 }
@@ -82,6 +85,7 @@ void task3(void *pvParameters)
                 if (Key_Scan_RTOS(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
                 {
                     task1_state = 1;
+										printf("task1 suapend\r\n");
                     vTaskSuspend(task1_handle); // 挂起task1
                 }
             break;
@@ -90,6 +94,7 @@ void task3(void *pvParameters)
                 if (Key_Scan_RTOS(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
                 {
                     task1_state = 0;
+										printf("task1 resume\r\n");
                     vTaskResume(task1_handle); // 恢复task1
                 }
             break;
@@ -105,6 +110,7 @@ void task3(void *pvParameters)
                 if (Key_Scan_RTOS(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
                 {
                     Scheduler_state = 1;
+										printf("Scheduler suapend\r\n");
                     vTaskSuspendAll(); // 挂起调度器
                 }
             break;
@@ -120,7 +126,7 @@ void task3(void *pvParameters)
                         
                         Scheduler_state = 0;
                         xTaskResumeAll(); // 恢复调度器
-                        printf("state: %d, %d, %d\n", eTaskGetState(task1_handle), eTaskGetState(task2_handle), eTaskGetState(task3_handle));
+                        printf("state: %d, %d, %d\r\n", eTaskGetState(task1_handle), eTaskGetState(task2_handle), eTaskGetState(task3_handle));
                     }
                 }
             break;
@@ -192,8 +198,6 @@ void start_tasks(void)
 							  (TaskHandle_t *) &task3_handle); 
 
     taskEXIT_CRITICAL();                          
-    /* 结束调度器，防止在创建任务时被调度器打断 */
-    vTaskEndScheduler(); 
 
     /* 启动任务只需要执行一次，用完就删，删除启动任务 */
     vTaskDelete(NULL);
