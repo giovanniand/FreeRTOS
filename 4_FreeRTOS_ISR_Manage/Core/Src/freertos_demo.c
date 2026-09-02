@@ -1,3 +1,11 @@
+/*
+ * @Author: Giovanni 1483577470@qq.com
+ * @Date: 2026-09-02 22:35:11
+ * @LastEditors: Giovanni 1483577470@qq.com
+ * @LastEditTime: 2026-09-02 22:53:43
+ * @FilePath: \FreeRTOS\4_FreeRTOS_ISR_Manage\Core\Src\freertos_demo.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include "freertos_demo.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -42,12 +50,12 @@ void task1(void *pvParameters)
     {
         if (Key_Scan_RTOS(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
         {
-            printf("关中断\r\n");
+            printf("suspend ISR\r\n");
             portDISABLE_INTERRUPTS(); // 关中断
         }
         else if (Key_Scan_RTOS(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
         {
-            printf("开中断\r\n");
+            printf("resume ISR\r\n");
             portENABLE_INTERRUPTS(); // 开中断
         }
     }
